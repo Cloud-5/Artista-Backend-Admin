@@ -26,11 +26,11 @@ exports.fetchAll = async (req, res, next) => {
 
 
 exports.createCategory = async (req, res, next) => {
-  const { name, description, margin, formats } = req.body;
+  const { name, description, margin, formats, banner } = req.body;
 
   try {
     // Create category
-    const categoryResult = await ArtCategories.post(name, description, margin);
+    const categoryResult = await ArtCategories.post(name, description, margin, banner);
 
     // Get the generated category ID
     const categoryId = categoryResult.categoryId;
@@ -56,11 +56,11 @@ exports.createCategory = async (req, res, next) => {
 
 exports.updateCategory = async (req, res, next) => {
   const categoryId = req.params.categoryId;
-  const { name, description, margin, formats } = req.body;
+  const { name, description, margin, formats, banner } = req.body;
 
   try {
     // Update category
-    await ArtCategories.update(categoryId, name, description, margin);
+    await ArtCategories.update(categoryId, name, description, margin, banner);
 
     // Update or insert new formats associated with the category
     const existingFormats = await ArtCategoriesFormats.fetchSupportedFormats(categoryId);
@@ -101,3 +101,16 @@ exports.deleteCategory = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.deleteFormats = async (req, res, next) => {
+  const categoryId = req.params.categoryId;
+
+  try {
+    // Delete format
+    await ArtCategoriesFormats.deleteByCategoryId(categoryId);
+
+    res.status(200).json({ message: 'Formats deleted successfully!' });
+  } catch (error) {
+    next(error);
+  }
+}
