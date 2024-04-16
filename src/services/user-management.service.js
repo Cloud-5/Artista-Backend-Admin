@@ -34,14 +34,31 @@ class userManagement {
 
   static removeBan(userId) {
     return db.execute('UPDATE user SET isBanned = FALSE, ban_reason = NULL,ban_start_date = NULL, ban_end_date = NULL  WHERE user_id = ?', [userId]);
-}
+  }
 
 
   static deleteUser(userId) {
     return db.execute('UPDATE user SET isActive = FALSE WHERE user_id = ?', [userId]);
   }
+  
   static getArtistDetails(userId) {
     return db.execute('SELECT * FROM user WHERE user_id = ?', [userId]);
+  }
+
+  static async findExpiredBans() {
+    try {
+      const [rows] = await db.execute(
+        'SELECT user_id FROM user WHERE isBanned = TRUE AND ban_end_date < NOW()'
+      );
+
+      const expiredBans = rows.map(row => row.user_id);
+      console.log('expired',expiredBans);
+
+      return expiredBans;
+    } catch (error) {
+      console.error('Error finding expired bans:', error);
+      throw error;
+    }
   }
 
 }

@@ -1,4 +1,5 @@
 const userManagement = require('../services/user-management.service');
+const schedule = require('node-schedule')
 
 exports.getAllUserData = async (req, res, next) => {
   try {
@@ -86,3 +87,45 @@ exports.removeBan = async (req, res, next) => {
   }
 };
 
+// const job = schedule.scheduleJob('0 1 * * *', async()=>{
+//   try {
+//     const expiredBans = await userManagement.findExpiredBans();
+
+//     for(const user of expiredBans){
+//       await userManagement.removeBan(user.userId);
+//       console.log('Ban removed for user ${user.userId}');
+//     }
+//   } catch (error) {
+//     console.error('Error removing bans',error);
+//   }
+// });
+
+const scheduledJob = async () => {
+  try {
+    const expiredBans = await userManagement.findExpiredBans();
+
+    for (const userId of expiredBans) {
+      await userManagement.removeBan(userId);
+      console.log(`Ban removed for user ${userId}`);
+    }
+  } catch (error) {
+    console.error('Error removing bans:', error);
+  }
+};
+
+// Schedule the job to run at 1:00 AM every day
+const job = schedule.scheduleJob('0 0 * * *', scheduledJob);
+
+// Run the job manually (for debugging purposes)
+async function runScheduledJobManually() {
+  console.log('Running scheduled job manually...');
+  try {
+    await scheduledJob();
+    console.log('Scheduled job executed successfully.');
+  } catch (error) {
+    console.error('Error executing scheduled job:', error);
+  }
+}
+
+// Call the function to run the job manually
+runScheduledJobManually();

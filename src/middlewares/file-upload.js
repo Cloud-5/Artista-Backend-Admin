@@ -25,7 +25,7 @@ const upload = multer({
     s3,
     bucket: "test-artista",
     key: function (req, file, cb) {
-      /*I'm using Date.now() to make sure my file has a unique name*/
+      /*using Date.now() to make sure my file has a unique name*/
       req.file = Date.now() + file.originalname;
       cb(null, Date.now() + file.originalname);
     }
