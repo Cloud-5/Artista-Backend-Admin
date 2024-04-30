@@ -26,6 +26,7 @@ class userManagement {
         SUM(CASE WHEN isBanned = TRUE AND isActive = TRUE THEN 1 ELSE 0 END) AS total_banned_accounts,
         SUM(CASE WHEN role = 'customer' THEN 1 ELSE 0 END) + SUM(CASE WHEN role = 'artist' AND is_approved = TRUE THEN 1 ELSE 0 END) AS total_registered_users
     FROM user`)
+    
   }
 
   static banUser(userId, banStartDate, banEndDate, banReason) {

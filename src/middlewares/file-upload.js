@@ -28,9 +28,11 @@ const upload = multer({
       /*using Date.now() to make sure my file has a unique name*/
       req.file = Date.now() + file.originalname;
       cb(null, Date.now() + file.originalname);
-    }
+    }  
   })
 });
+
+
 
 const deleteFromS3 = (key, callback) => {
   const params = {

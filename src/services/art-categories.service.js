@@ -18,7 +18,7 @@ class ArtCategories {
       [name, description, margin, banner]
     )
       .then(([result]) => {
-        return { categoryId: result.insertId }; // Return the generated category ID
+        return { categoryId: result.insertId }; 
       });
   }
 
@@ -28,7 +28,7 @@ class ArtCategories {
       [name, description, margin,banner, category_id]
     )
       .then(() => {
-        return { categoryId: category_id }; // Return the updated category ID
+        return { categoryId: category_id }; 
       });
   }
 
