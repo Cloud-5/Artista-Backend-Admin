@@ -16,7 +16,6 @@ exports.getDashboardOverview = async (req, res, next) => {
         overviewData.monthlyUserRegistrations = await Dashboard.getMonthlyUserRegistrations();
         overviewData.categoryPreferences = await Dashboard.getCategoryPreferences();
 
-        // Send the data in the response
         res.status(200).json(overviewData);
     } catch (error) {
         console.error('Error getting dashboard overview:', error);

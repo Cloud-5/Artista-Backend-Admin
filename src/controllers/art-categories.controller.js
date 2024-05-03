@@ -12,7 +12,7 @@ exports.fetchAll = async (req, res, next) => {
               const count = await ArtCategoriesFormats.fetchArtworkCount(category.category_id);
               return {
                   ...category,
-                  totalArtworks: count[0][0].artwork_count, // Access the artwork count correctly
+                  totalArtworks: count[0][0].artwork_count, // Access the artwork count 
                   formats: formats[0] // Access the format array
               };
           })

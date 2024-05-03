@@ -18,7 +18,7 @@ exports.getAllUserData = async (req, res, next) => {
     ]);
 
     const summaryData = userSummary[0][0];
-    // Construct the response object
+    // building the response object
     const responseData = {
       approvedArtists: approvedArtists[0],
       registeredCustomers: registeredCustomers[0],
@@ -100,6 +100,6 @@ const scheduledJob = async () => {
   }
 };
 
-// Schedule the job to run at 12:00 AM every day
+// schedule the job to run at 12:00 AM every day
 const job = schedule.scheduleJob('0 0 * * *', scheduledJob);
 

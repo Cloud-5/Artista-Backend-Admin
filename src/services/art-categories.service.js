@@ -1,5 +1,6 @@
 const db = require('../utils/database');
 
+// queries for category table
 class ArtCategories {
   constructor(category_id, name, description, margin) {
     this.category_id = category_id;
@@ -37,6 +38,7 @@ class ArtCategories {
   }
 }
 
+// queries for supported formats table
 class ArtCategoriesFormats {
   constructor(format_id, category_id, format_name) {
     this.format_id = format_id;

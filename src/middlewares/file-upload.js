@@ -25,7 +25,7 @@ const upload = multer({
     s3,
     bucket: "test-artista",
     key: function (req, file, cb) {
-      /*using Date.now() to make sure my file has a unique name*/
+      // using Date.now() to make sure my file has a unique name
       req.file = Date.now() + file.originalname;
       cb(null, Date.now() + file.originalname);
     }  
@@ -33,7 +33,7 @@ const upload = multer({
 });
 
 
-
+//deleting function for one file
 const deleteFromS3 = (key, callback) => {
   const params = {
     Bucket: "test-artista",
