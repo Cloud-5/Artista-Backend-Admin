@@ -1,6 +1,6 @@
 {
-  "host": "localhost",
-  "user": "root",
+  "host": "test-artista.cb8yae02uzrd.ap-south-1.rds.amazonaws.com",
+  "user": "cloud5",
   "database": "artista",
-  "password": ""
+  "password": "PUe9tw9D82U1eHufbN3D"
 }
