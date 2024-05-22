@@ -6,6 +6,7 @@ const artCategoryRouter = require('./src/routes/art-categories.routes');
 const userRouter = require('./src/routes/artist-request.routes');
 const dashboardRouter = require('./src/routes/dashboard.router');
 const userManagementRouter = require('./src/routes/user-management.routes');
+const adminRouter = require('./src/routes/admin.router');
 
 const {upload, deleteFromS3} = require('./src/middlewares/file-upload');
 
@@ -26,6 +27,7 @@ app.use('/art-categories', artCategoryRouter);
 app.use('/artist-request', userRouter);
 app.use('/dashboard', dashboardRouter);
 app.use('/user-management', userManagementRouter);
+app.use('/admin', adminRouter);
 
 app.post('/upload', upload.single('image'), (req, res) => {
     res.json({ image: req.file });
