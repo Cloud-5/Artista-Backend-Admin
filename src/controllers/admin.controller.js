@@ -37,9 +37,10 @@ exports.login = async (req, res) => {
         const accessToken = jwt.sign(response, process.env.ACCESS_TOKEN, {
           expiresIn: "8h",
         });
+        const admin_id = admin[0][0].admin_id;
         return res
       .status(200)
-      .json({ message: "Successful Login", accessToken: accessToken });
+      .json({ message: "Successful Login", accessToken: accessToken, admin_id: admin_id });
     }
     
     
@@ -142,3 +143,67 @@ exports.resetPassword = async (req, res) => {
       .json({ success: false, msg: "Something went wrong" });
   }
 };
+
+exports.getAdminDetails = async (req, res) => {
+  try {
+    const { admin_id } = req.params;
+    console.log("Fetching details for admin_id:", admin_id);
+    
+    const adminDetails = await adminService.getAdminDetails(admin_id);
+    console.log(adminDetails);
+    if (adminDetails[0].length === 0) {
+      return res.status(404).json({ message: "Admin not found." });
+    }
+    console.log(adminDetails[0][0]);
+
+    return res.status(200).json({ admin: adminDetails[0][0] });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+exports.updateAdminDetails = async (req, res) => {
+  try {
+    const { admin_id } = req.params;
+    const { name, email, profile_photo } = req.body;
+    console.log("Updating details for admin_id:", admin_id);
+
+    const updatedAdminDetails = await adminService.updateAdminDetails(
+      name,
+      email,
+      profile_photo,
+      admin_id
+    );
+    console.log(updatedAdminDetails);
+
+    if (updatedAdminDetails[0].affectedRows === 0) {
+      return res.status(404).json({ message: "Admin not found." });
+    }
+
+    return res.status(200).json({ message: "Admin details updated successfully." });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+exports.updateAdminPassword = async (req, res) => {
+  try {
+    const { admin_id } = req.params;
+    const { password  } = req.body;
+    console.log("Updating password for admin_id:", admin_id,'pass',password);
+
+    const updatedAdminPassword = await adminService.updateAdminPassword(
+      password,
+      admin_id
+    );
+    console.log(updatedAdminPassword);
+
+    if (updatedAdminPassword[0].affectedRows === 0) {
+      return res.status(404).json({ message: "Admin not found." });
+    }
+
+    return res.status(200).json({ message: "Admin password updated successfully." });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+}

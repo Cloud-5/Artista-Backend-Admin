@@ -8,5 +8,4 @@ router.put('/:categoryId', artCategoriesController.updateCategory);
 router.delete('/:categoryId', artCategoriesController.deleteCategory);
 router.delete('/formats/:categoryId', artCategoriesController.deleteFormats);
 
-
 module.exports = router;

@@ -11,7 +11,7 @@ exports.updateUserPassword = (password, email) => {
 }
 
 exports.loginUser = (email) => {
-    return db.execute('select email, password from admins where email=?', [email])
+    return db.execute('select email, password, admin_id from admins where email=?', [email])
 }
 exports.forgotPasword = async (email,link) => {
     let error= false;
@@ -46,3 +46,19 @@ exports.sendForgotPasswordEmail = async (senderAddress, link) => {
   
     return error;
   };
+
+
+  exports.getAdminDetails = (admin_id) => {
+    return db.execute('select admin_id, name, email, profile_photo,password from admins where admin_id=?', [admin_id]);
+  };
+
+  exports.updateAdminDetails = (name, email, profile_photo, admin_id) => {
+    return db.execute('update admins set name=?, email=?, profile_photo=? where admin_id=?', [name, email, profile_photo, admin_id]);
+  }
+
+  exports.updateAdminPassword = (password, admin_id) => {
+    console.log("password",password,'admin_id',admin_id);
+    return db.execute('update admins set password=? where admin_id=?', [password, admin_id]);
+  }
+
+  
