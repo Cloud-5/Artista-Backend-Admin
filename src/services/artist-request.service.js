@@ -2,11 +2,11 @@ const db = require('../utils/database');
 
 class artistRequest {
   static getRequestedArtists() {
-    return db.execute('SELECT user_id,profile_photo_url, fName, LName, role, location, registered_at, profession FROM user WHERE role = "artist" AND is_approved = FALSE and is_rejected=FALSE');
+    return db.execute('SELECT user_id,profile_photo_url, fName, LName, role, location, registered_at, profession, description FROM user WHERE role = "artist" AND is_approved = FALSE and is_rejected=FALSE');
   }
 
   static getRejectedArtists(){
-    return db.execute('SELECT user_id,profile_photo_url, fName, LName, role, location, registered_at, profession FROM user WHERE role = "artist" AND is_approved = FALSE and is_rejected=TRUE')
+    return db.execute('SELECT user_id,profile_photo_url, fName, LName, role, location, registered_at, profession, description FROM user WHERE role = "artist" AND is_approved = FALSE and is_rejected=TRUE')
   }
 
   static getArtistsSummary() {
@@ -32,6 +32,14 @@ class artistRequest {
 
   static deleteArtist(userId){
     return db.execute('DELETE FROM user WHERE user_id = ?',[userId]);
+  }
+
+  static getSocialAccounts(userId){
+    return db.execute(`
+        SELECT sa.*, smp.platform_name, smp.logo_url
+        FROM social_accounts sa
+        JOIN social_media_platforms smp ON sa.platform_id = smp.id
+        WHERE sa.user_id = ?`, [userId]);
   }
 }
 

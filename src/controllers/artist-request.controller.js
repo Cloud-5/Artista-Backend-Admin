@@ -12,6 +12,8 @@ exports.getAllArtistData = async (req, res, next) => {
     // Fetch artists summary data
     const artistsSummary = await artistRequest.getArtistsSummary();
 
+    
+
     // Extract summary data from the result
     const summaryData = artistsSummary[0][0];
 
@@ -37,7 +39,14 @@ exports.getArtistDetails = async (req, res, next) => {
 
   try {
     const artistDetails = await artistRequest.getArtistDetails(userId);
-    res.status(200).json(artistDetails[0][0]);
+    //fetch social accounts
+    const socialAccounts = await artistRequest.getSocialAccounts(userId);
+
+    const responseData = {
+      artistDetails: artistDetails[0][0],
+      socialAccounts: socialAccounts[0],
+    }
+    res.status(200).json(responseData);
   } catch (error) {
     console.error('Error getting artist details:', error);
     next(error);
