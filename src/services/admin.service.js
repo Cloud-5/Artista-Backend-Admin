@@ -57,7 +57,6 @@ exports.sendForgotPasswordEmail = async (senderAddress, link) => {
   }
 
   exports.updateAdminPassword = (password, admin_id) => {
-    console.log("password",password,'admin_id',admin_id);
     return db.execute('update admins set password=? where admin_id=?', [password, admin_id]);
   }
 

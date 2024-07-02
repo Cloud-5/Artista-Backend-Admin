@@ -38,15 +38,54 @@ exports.getAllUserData = async (req, res, next) => {
   }
 };
 
-exports.getArtistDetails = async (req, res, next) => {
-  const userId = req.params.userId;
+// exports.getArtistDetails = async (req, res, next) => {
+//   const userId = req.params.userId;
 
-  try {
-    const artistDetails = await userManagement.getArtistDetails(userId);
-    res.status(200).json(artistDetails[0][0]);
-  } catch (error) {
-    console.error('Error getting artist details:', error);
-    next(error);
+//   try {
+//     const artistDetails = await userManagement.getArtistDetails(userId);
+//     const socialAccounts = await userManagement.getSocialAccounts(userId);
+//     res.status(200).json(artistDetails[0][0]);
+//   } catch (error) {
+//     console.error('Error getting artist details:', error);
+//     next(error);
+//   }
+// };
+
+exports.getUserDetails = async (req, res, next) => {
+  const userId = req.params.userId;
+  const role = req.params.role;
+  console.log('userid',userId, 'role',role);
+
+  if(role === 'artist'){
+    try {
+      const userDetails = await userManagement.getArtistDetails(userId);
+      const socialAccounts = await userManagement.getSocialAccounts(userId);
+
+      const responseData = {
+        userDetails: userDetails[0][0],
+        socialAccounts: socialAccounts[0],
+      }
+      res.status(200).json(responseData);
+    } catch (error) {
+      console.error('Error getting artist details:', error);
+      next(error);
+    }
+  
+  } else if(role === 'customer'){
+    try {
+
+      const userDetails = await userManagement.getCustomerDetails(userId);
+      const responseData = {
+        userDetails: userDetails[0][0],
+      }
+      
+      res.status(200).json(responseData);
+    } catch (error) {
+      console.error('Error getting customer details:', error);
+      next(error);
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid role' });
   }
 };
 

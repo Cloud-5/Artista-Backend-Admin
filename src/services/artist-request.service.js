@@ -35,11 +35,7 @@ class artistRequest {
   }
 
   static getSocialAccounts(userId){
-    return db.execute(`
-        SELECT sa.*, smp.platform_name, smp.logo_url
-        FROM social_accounts sa
-        JOIN social_media_platforms smp ON sa.platform_id = smp.id
-        WHERE sa.user_id = ?`, [userId]);
+    return db.execute(`CALL GetSocialAccounts(?);`, [userId]);
   }
 }
 

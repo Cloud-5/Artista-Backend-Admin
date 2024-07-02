@@ -43,6 +43,18 @@ class userManagement {
   }
   
   static getArtistDetails(userId) {
+    return db.execute('CALL GetArtistDetails(?);', [userId]);
+  }
+
+  static getCustomerDetails(userId) {
+    return db.execute('CALL GetCustomerDetails(?);',[userId]);
+  }
+
+  static getSocialAccounts(userId){
+    return db.execute(`CALL GetSocialAccounts(?);`, [userId]);
+  }
+
+  static getUserSummery(userId) {
     return db.execute('SELECT * FROM user WHERE user_id = ?', [userId]);
   }
 
