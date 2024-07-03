@@ -34,7 +34,7 @@ exports.login = async (req, res) => {
 
     if (admin[0][0].password === password){
         const response = { email: admin[0][0].email };
-        const accessToken = jwt.sign(response, process.env.ACCESS_TOKEN, {
+        const accessToken = jwt.sign(response, process.env.JWT_SECRET, {
           expiresIn: "8h",
         });
         const admin_id = admin[0][0].admin_id;
@@ -166,7 +166,6 @@ exports.updateAdminDetails = async (req, res) => {
   try {
     const { admin_id } = req.params;
     const { name, email, profile_photo } = req.body;
-    console.log("Updating details for admin_id:", admin_id);
 
     const updatedAdminDetails = await adminService.updateAdminDetails(
       name,
@@ -174,7 +173,6 @@ exports.updateAdminDetails = async (req, res) => {
       profile_photo,
       admin_id
     );
-    console.log(updatedAdminDetails);
 
     if (updatedAdminDetails[0].affectedRows === 0) {
       return res.status(404).json({ message: "Admin not found." });
@@ -206,4 +204,4 @@ exports.updateAdminPassword = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
-}
+};

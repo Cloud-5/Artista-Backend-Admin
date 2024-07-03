@@ -8,6 +8,8 @@ const dashboardRouter = require('./src/routes/dashboard.router');
 const userManagementRouter = require('./src/routes/user-management.routes');
 const adminRouter = require('./src/routes/admin.router');
 
+const verifyToken = require('./src/middlewares/verifyToken');
+
 const {upload, deleteFromS3} = require('./src/middlewares/file-upload');
 
 const app = express();
