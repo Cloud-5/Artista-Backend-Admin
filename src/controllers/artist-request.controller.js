@@ -60,7 +60,6 @@ exports.approveArtist = async (req, res, next) => {
     await artistRequest.approveArtist(userId);
     res.status(200).json({ message: 'Artist approved successfully!' });
   } catch (error) {
-    console.error('Error approving artist:', error);
     next(error);
   }
 };

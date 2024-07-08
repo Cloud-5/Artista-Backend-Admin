@@ -38,19 +38,6 @@ exports.getAllUserData = async (req, res, next) => {
   }
 };
 
-// exports.getArtistDetails = async (req, res, next) => {
-//   const userId = req.params.userId;
-
-//   try {
-//     const artistDetails = await userManagement.getArtistDetails(userId);
-//     const socialAccounts = await userManagement.getSocialAccounts(userId);
-//     res.status(200).json(artistDetails[0][0]);
-//   } catch (error) {
-//     console.error('Error getting artist details:', error);
-//     next(error);
-//   }
-// };
-
 exports.getUserDetails = async (req, res, next) => {
   const userId = req.params.userId;
   const role = req.params.role;
@@ -60,14 +47,16 @@ exports.getUserDetails = async (req, res, next) => {
     try {
       const userDetails = await userManagement.getArtistDetails(userId);
       const socialAccounts = await userManagement.getSocialAccounts(userId);
+      const rank = await userManagement.getArtistRank(userId);
 
       const responseData = {
         userDetails: userDetails[0][0],
         socialAccounts: socialAccounts[0],
+        rank: rank[0][0]
+        
       }
       res.status(200).json(responseData);
     } catch (error) {
-      console.error('Error getting artist details:', error);
       next(error);
     }
   
@@ -81,7 +70,6 @@ exports.getUserDetails = async (req, res, next) => {
       
       res.status(200).json(responseData);
     } catch (error) {
-      console.error('Error getting customer details:', error);
       next(error);
     }
   } else {
@@ -89,14 +77,35 @@ exports.getUserDetails = async (req, res, next) => {
   }
 };
 
+
+exports.rankArtist = async(req, res, next) => {
+  const artistId = req.params.userId;
+  console.log('artistId',artistId);
+  try {
+      await userManagement.rankArtist(artistId);
+      res.status(200).json({message: 'Artist Ranked Successfully!'});
+  } catch (error) {
+      next(error);
+  }
+}
+
+exports.unrankArtist = async(req, res, next) => {
+  const artistId = req.params.userId;
+  try {
+      await userManagement.unrankArtist(artistId);
+      res.status(200).json({message: 'Artist Unranked Successfully!'});
+  } catch (error) {
+      next(error);
+  }
+
+}
+
 exports.deleteAccount = async (req, res, next) => {
   const userId = req.params.userId;
 
   try {
     await userManagement.deleteUser(userId);
-    res.status(200).json({ message: 'Account deleted successfully!' });
   } catch (error) {
-    console.error('Error deleting account:', error);
     next(error);
   }
 };

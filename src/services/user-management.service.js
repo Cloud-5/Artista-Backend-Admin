@@ -2,19 +2,19 @@ const db = require('../utils/database');
 
 class userManagement {
   static getApprovedArtists() {
-    return db.execute('SELECT user_id,profile_photo_url, fName, LName, role, location, registered_at, profession FROM user WHERE role = "artist" AND is_approved = TRUE and is_rejected=FALSE and isBanned=FALSE and isActive=TRUE');
+    return db.execute('SELECT * FROM user WHERE role = "artist" AND is_approved = TRUE and is_rejected=FALSE and isBanned=FALSE and isActive=TRUE');
   }
 
   static getRegisteredCustomers() {
-    return db.execute('SELECT user_id,profile_photo_url, fName, LName, role, location, registered_at FROM user WHERE role = "customer" and isActive=TRUE and isBanned=FALSE');
+    return db.execute('SELECT * FROM user WHERE role = "customer" and isActive=TRUE and isBanned=FALSE');
   }
 
   static getDeletedAccounts() {
-    return db.execute('SELECT user_id,profile_photo_url, fName, LName, role, location, registered_at FROM user WHERE isActive=FALSE');
+    return db.execute('SELECT * FROM user WHERE isActive=FALSE');
   }
 
   static getBannedAccounts() {
-    return db.execute('SELECT user_id,profile_photo_url, fName, LName, role, location, registered_at FROM user WHERE isBanned=TRUE and isActive=TRUE');
+    return db.execute('SELECT * FROM user WHERE isBanned=TRUE and isActive=TRUE');
   }
 
   static getUserSummary() {
@@ -39,6 +39,7 @@ class userManagement {
 
 
   static deleteUser(userId) {
+    console.log('userId',userId);
     return db.execute('UPDATE user SET isActive = FALSE WHERE user_id = ?', [userId]);
   }
   
@@ -53,6 +54,19 @@ class userManagement {
   static getSocialAccounts(userId){
     return db.execute(`CALL GetSocialAccounts(?);`, [userId]);
   }
+
+  static getArtistRank(userId){
+    return db.execute('SELECT featured FROM user WHERE user_id=?;',[userId]);
+  }
+
+  static rankArtist(artistId) {
+    console.log('artistId',artistId)
+    return db.execute('UPDATE user SET featured = 1 WHERE user_id = ?;',[artistId]);
+}
+
+static unrankArtist(artistId) {
+    return db.execute('UPDATE user SET featured = 0 WHERE user_id = ?;',[artistId]);
+}
 
   static getUserSummery(userId) {
     return db.execute('SELECT * FROM user WHERE user_id = ?', [userId]);

@@ -12,32 +12,48 @@ aws.config.update({
 const s3 = new aws.S3();
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+  const uploadType = req.headers.uploadtype;
+  console.log('req.headers', req.headers);
+  console.log('uploadType', uploadType);
+
+  let allowedMimeTypes = [];
+
+  if (uploadType === 'profilePicture') {
+    allowedMimeTypes = ['image/jpeg', 'image/png'];
+  } else if (uploadType === 'categoryBanner') {
+    allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff'];
+  } else if(uploadType === '3DArtwork') {
+    allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff', 'model/gltf+json'];
+  } else {
+    return cb(new Error('Invalid upload type!'), false);
+  }
+
+  if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Invalid file type, only JPEG and PNG is allowed!'), false);
+    cb(new Error('Invalid file type for this upload type!'), false);
   }
 };
 
 const upload = multer({
-  fileFilter: fileFilter,
   storage: multerS3({
-    //acl: 'public-read',
     s3,
     bucket: process.env.AWS_BUCKET_NAME,
     key: function (req, file, cb) {
-      // using Date.now() to make sure my file has a unique name
-      req.file = Date.now() + file.originalname;
-      cb(null, Date.now() + file.originalname);
-    }  
-  })
+      const folder = req.headers.folder;
+      console.log('folder', folder);
+      const uniqueName = Date.now() + '-' + file.originalname;
+      const key = `${folder}/${uniqueName}`;
+      req.file = key;
+      cb(null, key);
+    }
+  }),
+  fileFilter: fileFilter
 });
 
-
-//deleting function for one file
 const deleteFromS3 = (key, callback) => {
   const params = {
-    Bucket: "test-artista",
+    Bucket: process.env.AWS_BUCKET_NAME,
     Key: key
   };
 
@@ -50,6 +66,6 @@ const deleteFromS3 = (key, callback) => {
       callback(null, data);
     }
   });
-}
+};
 
-module.exports = { upload, deleteFromS3 };
+module.exports = { upload: upload.single('image'), deleteFromS3 };

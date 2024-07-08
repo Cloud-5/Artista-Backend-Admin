@@ -11,9 +11,9 @@ class artistRequest {
 
   static getArtistsSummary() {
     return db.execute(`SELECT
-    SUM(CASE WHEN is_approved = 0 AND is_rejected = 0 THEN 1 ELSE 0 END) AS total_pending_requests,
-    SUM(CASE WHEN is_rejected = 1 THEN 1 ELSE 0 END) AS total_rejected_artists,
-    SUM(CASE WHEN is_approved = 1 AND is_rejected = 0 THEN 1 ELSE 0 END) AS total_approved_artists
+    SUM(CASE WHEN role = 'artist' AND is_approved = 0 AND is_rejected = 0 THEN 1 ELSE 0 END) AS total_pending_requests,
+    SUM(CASE WHEN role = 'artist' AND is_approved = 0 AND is_rejected = 1 THEN 1 ELSE 0 END) AS total_rejected_artists,
+    SUM(CASE WHEN role = 'artist' AND is_approved = 1 AND is_rejected = 0 THEN 1 ELSE 0 END) AS total_approved_artists
     FROM user;
     `)
   }
