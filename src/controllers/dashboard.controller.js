@@ -15,6 +15,9 @@ exports.getDashboardOverview = async (req, res, next) => {
         overviewData.numRegisteredUsers = await Dashboard.getNumRegisteredUsers();
         overviewData.monthlyUserRegistrations = await Dashboard.getMonthlyUserRegistrations();
         overviewData.categoryPreferences = await Dashboard.getCategoryPreferences();
+        overviewData.trendingArtists = await Dashboard.fetchTrendingArtists();
+        overviewData.trendingArts = await Dashboard.fetchTrendingArts();
+        overviewData.topCustomers = await Dashboard.fetchTopCustomers();
 
         res.status(200).json(overviewData);
     } catch (error) {

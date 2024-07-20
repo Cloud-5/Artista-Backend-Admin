@@ -13,20 +13,20 @@ class ArtCategories {
     return db.execute('SELECT * FROM category');
   }
 
-  static post(name, description, margin, banner) {
+  static post(name, description, margin, banner, is3D) {
     return db.execute(
-      'INSERT INTO category (name, description, margin, banner) VALUES (?, ?, ?, ?)',
-      [name, description, margin, banner]
+      'INSERT INTO category (name, description, margin, banner, is3D) VALUES (?, ?, ?, ?, ?)',
+      [name, description, margin, banner, is3D]
     )
       .then(([result]) => {
         return { categoryId: result.insertId }; 
       });
   }
 
-  static update(category_id, name, description, margin, banner) {
+  static update(category_id, name, description, margin, banner, is3D) {
     return db.execute(
-      'UPDATE category SET name = ?, description = ?, margin = ?, banner = ? WHERE category_id = ?',
-      [name, description, margin,banner, category_id]
+      'UPDATE category SET name = ?, description = ?, margin = ?, banner = ?, is3D = ? WHERE category_id = ?',
+      [name, description, margin,banner,is3D, category_id]
     )
       .then(() => {
         return { categoryId: category_id }; 

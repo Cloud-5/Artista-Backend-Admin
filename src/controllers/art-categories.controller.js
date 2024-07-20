@@ -26,11 +26,11 @@ exports.fetchAll = async (req, res, next) => {
 
 
 exports.createCategory = async (req, res, next) => {
-  const { name, description, margin, formats, banner } = req.body;
+  const { name, description, margin, formats, banner, is3D } = req.body;
 
   try {
     // Create category
-    const categoryResult = await ArtCategories.post(name, description, margin, banner);
+    const categoryResult = await ArtCategories.post(name, description, margin, banner, is3D);
 
     // Get the generated category ID
     const categoryId = categoryResult.categoryId;
@@ -56,11 +56,11 @@ exports.createCategory = async (req, res, next) => {
 
 exports.updateCategory = async (req, res, next) => {
   const categoryId = req.params.categoryId;
-  const { name, description, margin, formats, banner } = req.body;
+  const { name, description, margin, formats, banner, is3D } = req.body;
 
   try {
     // Update category
-    await ArtCategories.update(categoryId, name, description, margin, banner);
+    await ArtCategories.update(categoryId, name, description, margin, banner, is3D);
 
     // Update or insert new formats associated with the category
     const existingFormats = await ArtCategoriesFormats.fetchSupportedFormats(categoryId);
