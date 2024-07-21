@@ -9,15 +9,11 @@ class Dashboard {
     return result[0][0].numRegisteredCustomers;
   }
 
-  static async getMonthlyRegistrations() {
+  static async getMonthlyRegistrations(year) {
     const result = await db.execute(`
-            SELECT DATE_FORMAT(registered_at, '%Y-%m') AS registrationMonth,
-                   COUNT(*) AS registrationsCount
-            FROM user
-            WHERE registered_at >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-            GROUP BY registrationMonth;
-        `);
-    return result[0].map((row) => row.registrationsCount);
+            CALL GetMonthlyRegistrations(?);
+        `,[year]);
+    return result[0][0];
   }
 
   static async getNumUploadedCreations() {
@@ -27,15 +23,11 @@ class Dashboard {
     return result[0][0].numUploadedCreations;
   }
 
-  static async getMonthlyCreations() {
+  static async getMonthlyCreations(year) {
     const result = await db.execute(`
-            SELECT DATE_FORMAT(published_date, '%Y-%m') AS publicationMonth,
-                   COUNT(*) AS creationsCount
-            FROM artwork
-            WHERE published_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-            GROUP BY publicationMonth;
-        `);
-    return result[0].map((row) => row.creationsCount);
+            call getMonthlyCreation(?);
+        `,[year]);
+    return result[0][0];
   }
 
   static async getNumApprovedArtists() {
@@ -45,15 +37,11 @@ class Dashboard {
     return result[0][0].numApprovedArtists;
   }
 
-  static async getMonthlyApprovals() {
+  static async getMonthlyApprovals(year) {
     const result = await db.execute(`
-            SELECT DATE_FORMAT(registered_at, '%Y-%m') AS approvalMonth,
-                   COUNT(*) AS approvalsCount
-            FROM user
-            WHERE role = 'artist' AND is_approved = TRUE AND registered_at >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
-            GROUP BY approvalMonth;
-        `);
-    return result[0].map((row) => row.approvalsCount);
+            CALL getMonthlyApprovals(?);
+        `,[year]);
+    return result[0][0];
   }
 
   static async getNumRegisteredUsers() {
